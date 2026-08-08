@@ -1,0 +1,245 @@
+/* =========================================
+   GENERAL HOVER EFFECTS
+   ========================================= */
+
+/* Navbar links */
+.nav-hover {
+  transition: all 0.2s ease;
+}
+
+.nav-hover:hover {
+  color: #d81b60 !important;
+  transform: translateY(-1px);
+}
+
+
+/* =========================================
+   AUTH BUTTONS
+   ========================================= */
+
+.login-hover {
+  transition: all 0.2s ease;
+}
+
+.login-hover:hover {
+  background-color: #fce4ec;
+  border-radius: 20px;
+  color: #ad1457 !important;
+}
+
+
+.signup-hover {
+  transition: all 0.2s ease;
+}
+
+.signup-hover:hover {
+  background-color: #d81b60 !important;
+  color: #fff !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(216, 27, 96, 0.25);
+}
+
+
+.logout-hover {
+  transition: all 0.2s ease;
+}
+
+.logout-hover:hover {
+  background-color: #fce4ec !important;
+  color: #ad1457 !important;
+  transform: translateY(-2px);
+}
+
+
+/* =========================================
+   CART BUTTON
+   ========================================= */
+
+.cart-hover {
+  transition: all 0.2s ease;
+}
+
+.cart-hover:hover {
+  background-color: #ad1457 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px rgba(216, 27, 96, 0.3);
+}
+
+
+/* =========================================
+   CATEGORIES
+   ========================================= */
+
+.category-hover {
+  transition: all 0.2s ease;
+}
+
+.category-hover:hover {
+  color: #d81b60 !important;
+}
+
+
+.dropdown-hover {
+  transition: all 0.2s ease;
+}
+
+.dropdown-hover:hover {
+  color: #d81b60 !important;
+  background-color: #fce4ec;
+}
+
+
+/* =========================================
+   PRODUCT CARDS
+   ========================================= */
+
+.product-card-hover {
+  border: 2px solid transparent;
+  border-radius: 12px;
+  padding: 15px;
+  background-color: #fff;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.product-card-hover:hover {
+  border-color: #d81b60;
+  box-shadow: 0 6px 20px rgba(216, 27, 96, 0.15);
+}
+
+
+/* =========================================
+   PRODUCT IMAGE
+   ========================================= */
+
+.product-image-hover {
+  transition: transform 0.3s ease;
+}
+
+.product-card-hover:hover .product-image-hover {
+  transform: scale(1.03);
+}
+
+
+/* =========================================
+   ADD TO CART BUTTON
+   ========================================= */
+
+.add-cart-hover {
+  transition: all 0.2s ease;
+}
+
+.add-cart-hover:hover {
+  background-color: #ad1457 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(216, 27, 96, 0.3);
+}
+
+
+/* =========================================
+   GENERAL CLICKABLE ELEMENTS
+   ========================================= */
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Product Details - Button Hover Effects */
+
+/* Favourite */
+.product-favourite-btn {
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.product-favourite-btn:hover {
+  background-color: #facee2 !important;
+  color: #ad1457 !important;
+}
+
+/* Add to Cart */
+.product-cart-btn {
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.product-cart-btn:hover {
+  background-color: #e6739a !important;
+  color: #ffffff !important;
+}
+
+/* Buy It Now */
+.product-buy-btn {
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.product-buy-btn:hover {
+  background-color: #575454 !important;
+  color: #ffffff !important;
+}
+
+/* ================================================= */
+/* ZOOM BUTTON                                       */
+/* ================================================= */
+
+.zoom-button-hover {
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.zoom-button-hover:hover {
+  transform: scale(1.08);
+  background-color: #fce4ec !important;
+  box-shadow: 0 5px 15px rgba(216, 27, 96, 0.3);
+}
+
+
+/* ================================================= */
+/* ZOOM CONTROLS                                     */
+/* ================================================= */
+
+.zoom-control-hover {
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.zoom-control-hover:hover:not(:disabled) {
+  transform: scale(1.08);
+  background-color: #d81b60 !important;
+  color: #fff !important;
+  box-shadow: 0 4px 12px rgba(216, 27, 96, 0.3);
+}
+
+.zoom-control-hover:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+
+/* ================================================= */
+/* BACK BUTTON                                       */
+/* ================================================= */
+
+.product-back-hover {
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.product-back-hover:hover {
+  color: #b6aaaf !important;
+  transform: translateX(-3px);
+}
+
+.checkout-button-hover {
+  transition: background-color 0.2s ease;
+}
+
+.checkout-button-hover:hover {
+  background-color: #a5d6a7 !important;
+}
