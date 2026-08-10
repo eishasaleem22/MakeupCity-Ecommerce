@@ -1,18 +1,3 @@
-// server/scripts/updateProductImages.js
-//
-// Run this from your server folder with:  node scripts/updateProductImages.js
-// Make sure your server/.env has MONGO_URI set, and that dotenv is installed.
-//
-// What it does:
-// 1. Connects to your MongoDB
-// 2. Fetches every product
-// 3. Builds a filename from brand + name (e.g. "MAC Studio Fix Fluid Foundation" -> "mac-studio-fix-fluid-foundation.jpg")
-// 4. Sets product.image = "/images/products/<filename>.jpg"
-// 5. Saves the update
-//
-// Before running this: make sure your images are already placed in
-// client/public/images/products/  using the exact filenames printed below.
- 
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const path = require("path");

@@ -2,39 +2,33 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
-function Login() {
+function AdminLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
 
-  const { login } = useAuth();
+  const { adminLogin } = useAuth();
   const navigate = useNavigate();
+
+  // ==========================================
+  // ADMIN LOGIN
+  // ==========================================
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
     try {
-      // Login and get the logged-in user's data
-      const loggedInUser = await login(email, password);
+      await adminLogin(email, password);
 
-      // ==========================================
-      // ROLE-BASED REDIRECTION
-      // ==========================================
-
-      if (loggedInUser.role === "admin") {
-        // Admin goes to Admin Dashboard
-        navigate("/admin/dashboard");
-      } else {
-        // Normal customer goes to customer homepage
-        navigate("/");
-      }
-
+      // Admin successfully logged in
+      navigate("/admin/dashboard");
     } catch (err) {
       setError(
         err.response?.data?.message ||
-        "Invalid credentials"
+          err.message ||
+          "Invalid email or password"
       );
     }
   };
@@ -43,26 +37,39 @@ function Login() {
     <div
       style={{
         maxWidth: "400px",
-        margin: "60px auto",
+        margin: "80px auto",
         padding: "30px",
         border: "1px solid #eee",
         borderRadius: "12px",
+        boxShadow: "0 4px 15px rgba(0,0,0,0.08)",
       }}
     >
       <h2
         style={{
           color: "#d81b60",
           textAlign: "center",
+          marginBottom: "10px",
         }}
       >
-        Login
+        Admin Login
       </h2>
+
+      <p
+        style={{
+          textAlign: "center",
+          color: "#888",
+          marginBottom: "25px",
+        }}
+      >
+        Makeup City Administration
+      </p>
 
       {error && (
         <p
           style={{
             color: "red",
             textAlign: "center",
+            marginBottom: "15px",
           }}
         >
           {error}
@@ -70,18 +77,14 @@ function Login() {
       )}
 
       <form onSubmit={handleSubmit}>
-        {/* EMAIL */}
-
         <input
           type="email"
-          placeholder="Email"
+          placeholder="Admin Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
           style={inputStyle}
         />
-
-        {/* PASSWORD */}
 
         <div
           style={{
@@ -91,7 +94,7 @@ function Login() {
         >
           <input
             type={showPassword ? "text" : "password"}
-            placeholder="Password"
+            placeholder="Admin Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
@@ -112,32 +115,13 @@ function Login() {
           </span>
         </div>
 
-        {/* LOGIN BUTTON */}
-
         <button
           type="submit"
           style={buttonStyle}
         >
-          Login
+          Login as Admin
         </button>
       </form>
-
-      <p
-        style={{
-          textAlign: "center",
-          marginTop: "15px",
-        }}
-      >
-        Don't have an account?{" "}
-        <a
-          href="/signup"
-          style={{
-            color: "#d81b60",
-          }}
-        >
-          Sign Up
-        </a>
-      </p>
     </div>
   );
 }
@@ -172,4 +156,4 @@ const buttonStyle = {
   cursor: "pointer",
 };
 
-export default Login;
+export default AdminLogin;

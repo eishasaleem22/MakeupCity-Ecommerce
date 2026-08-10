@@ -1,7 +1,8 @@
 const transporter = require("../config/email");
+const Order = require("../models/Order");
 
 // ==========================================
-// SEND ORDER CONFIRMATION EMAIL
+// CREATE ORDER + SEND CONFIRMATION EMAIL
 // ==========================================
 
 const sendOrderConfirmation = async (req, res) => {
@@ -43,6 +44,61 @@ const sendOrderConfirmation = async (req, res) => {
         message: "Cart is empty.",
       });
     }
+
+    if (!paymentMethod) {
+      return res.status(400).json({
+        success: false,
+        message: "Payment method is required.",
+      });
+    }
+
+    // ==========================================
+    // GET LOGGED-IN USER
+    // ==========================================
+
+    // If the customer is logged in, authMiddleware
+    // can attach the user to req.user.
+    //
+    // We keep this optional so your existing
+    // checkout doesn't break for guest orders.
+
+    const userId = req.user ? req.user._id : null;
+
+    // ==========================================
+    // PREPARE ORDER ITEMS
+    // ==========================================
+
+    const orderItems = cart.map((item) => ({
+      product: item._id || null,
+      name: item.name,
+      price: item.price,
+      qty: item.qty,
+      image: item.image || "",
+    }));
+
+    // ==========================================
+    // CREATE ORDER IN MONGODB
+    // ==========================================
+
+    const order = await Order.create({
+      user: userId,
+
+      fullName,
+      email,
+      phone,
+      address,
+      city,
+      province,
+      postalCode: postalCode || "",
+
+      orderItems,
+
+      paymentMethod,
+
+      totalPrice,
+
+      status: "Pending",
+    });
 
     // ==========================================
     // CREATE ORDER ITEMS HTML
@@ -88,7 +144,7 @@ const sendOrderConfirmation = async (req, res) => {
 
       to: email,
 
-      subject: "MakeupCity - Order Confirmation",
+      subject: `MakeupCity - Order Confirmation #${order._id}`,
 
       html: `
         <div style="
@@ -144,6 +200,10 @@ const sendOrderConfirmation = async (req, res) => {
               Your order has been successfully placed.
               We have received your order details and will
               process your order shortly.
+            </p>
+
+            <p>
+              <strong>Order ID:</strong> ${order._id}
             </p>
 
             <!-- ORDER SUMMARY -->
@@ -262,6 +322,10 @@ const sendOrderConfirmation = async (req, res) => {
               <strong>Payment Method:</strong> ${paymentMethod}
             </p>
 
+            <p>
+              <strong>Order Status:</strong> Pending
+            </p>
+
             <hr style="
               border: none;
               border-top: 1px solid #eee;
@@ -286,22 +350,40 @@ const sendOrderConfirmation = async (req, res) => {
     // SEND EMAIL
     // ==========================================
 
-    await transporter.sendMail(mailOptions);
+    try {
+      await transporter.sendMail(mailOptions);
+    } catch (emailError) {
+      console.error(
+        "Order saved but confirmation email failed:",
+        emailError
+      );
 
-    return res.status(200).json({
+      return res.status(201).json({
+        success: true,
+        message:
+          "Order placed successfully, but confirmation email could not be sent.",
+        orderId: order._id,
+        order,
+      });
+    }
+
+    // ==========================================
+    // SUCCESS RESPONSE
+    // ==========================================
+
+    return res.status(201).json({
       success: true,
-      message: "Order confirmation email sent successfully.",
+      message: "Order placed successfully.",
+      orderId: order._id,
+      order,
     });
   } catch (error) {
-    console.error(
-      "Error sending order confirmation email:",
-      error
-    );
+    console.error("Error creating order:", error);
 
     return res.status(500).json({
       success: false,
-      message:
-        "Order was received, but confirmation email could not be sent.",
+      message: "Failed to create order.",
+      error: error.message,
     });
   }
 };
