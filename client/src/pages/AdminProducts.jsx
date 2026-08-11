@@ -14,6 +14,20 @@ function AdminProducts() {
 
   const [searchTerm, setSearchTerm] = useState("");
 
+  // ==========================================
+  // CONFIRMATION MODAL STATE
+  // ==========================================
+
+  const [showConfirmModal, setShowConfirmModal] =
+    useState(false);
+
+  const [confirmAction, setConfirmAction] =
+    useState(null);
+
+  // ==========================================
+  // FORM DATA
+  // ==========================================
+
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -40,7 +54,10 @@ function AdminProducts() {
 
       setProducts(data);
     } catch (err) {
-      console.error("Error fetching products:", err);
+      console.error(
+        "Error fetching products:",
+        err
+      );
 
       setError(
         "Unable to load products. Please make sure the server is running."
@@ -123,7 +140,8 @@ function AdminProducts() {
       brand: product.brand || "",
       shade: product.shade || "",
       image: product.image || "",
-      countInStock: product.countInStock ?? "",
+      countInStock:
+        product.countInStock ?? "",
     });
 
     setShowForm(true);
@@ -135,74 +153,101 @@ function AdminProducts() {
   };
 
   // ==========================================
-  // SAVE PRODUCT
+  // OPEN CONFIRMATION MODAL
   // ==========================================
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const openConfirmModal = (action) => {
+    setConfirmAction(action);
+    setShowConfirmModal(true);
+  };
 
-    // ------------------------------------------
-    // CONFIRMATION BEFORE ADD / UPDATE
-    // ------------------------------------------
+  // ==========================================
+  // CLOSE CONFIRMATION MODAL
+  // ==========================================
 
-    let confirmationMessage = "";
+  const closeConfirmModal = () => {
+    setShowConfirmModal(false);
+    setConfirmAction(null);
+  };
 
-    if (editingProduct) {
-      confirmationMessage =
-        `Are you sure you want to update "${formData.name}"?\n\n` +
-        "The existing product information will be replaced with these changes.";
-    } else {
-      confirmationMessage =
-        `Are you sure you want to add "${formData.name}" as a new product?\n\n` +
-        "This product will be added to your product catalog.";
-    }
+  // ==========================================
+  // HANDLE CONFIRMATION
+  // ==========================================
 
-    const confirmed = window.confirm(
-      confirmationMessage
-    );
-
-    if (!confirmed) {
+  const handleConfirmAction = async () => {
+    if (!confirmAction) {
       return;
     }
 
-    // ------------------------------------------
-    // SAVE PRODUCT
-    // ------------------------------------------
+    const { type, productId, productData } =
+      confirmAction;
 
-    try {
-      setError("");
+    closeConfirmModal();
 
-      if (!adminUser?.token) {
-        setError(
-          "Admin session not found. Please login again."
-        );
-        return;
-      }
+    // ==========================================
+    // UPDATE PRODUCT
+    // ==========================================
 
-      const config = {
-        headers: {
-          Authorization: `Bearer ${adminUser.token}`,
-        },
-      };
+    if (type === "update") {
+      try {
+        setError("");
 
-      const productData = {
-        ...formData,
-        price: Number(formData.price),
-        countInStock: Number(formData.countInStock),
-      };
+        if (!adminUser?.token) {
+          setError(
+            "Admin session not found. Please login again."
+          );
+          return;
+        }
 
-      if (editingProduct) {
-        // UPDATE PRODUCT
+        const config = {
+          headers: {
+            Authorization: `Bearer ${adminUser.token}`,
+          },
+        };
 
         await axios.put(
-          `http://localhost:5000/api/products/${editingProduct._id}`,
+          `http://localhost:5000/api/products/${productId}`,
           productData,
           config
         );
 
-        alert("Product updated successfully!");
-      } else {
-        // ADD PRODUCT
+        resetForm();
+        await fetchProducts();
+      } catch (err) {
+        console.error(
+          "Error updating product:",
+          err
+        );
+
+        setError(
+          err.response?.data?.message ||
+            "Failed to update product."
+        );
+      }
+
+      return;
+    }
+
+    // ==========================================
+    // ADD PRODUCT
+    // ==========================================
+
+    if (type === "add") {
+      try {
+        setError("");
+
+        if (!adminUser?.token) {
+          setError(
+            "Admin session not found. Please login again."
+          );
+          return;
+        }
+
+        const config = {
+          headers: {
+            Authorization: `Bearer ${adminUser.token}`,
+          },
+        };
 
         await axios.post(
           "http://localhost:5000/api/products",
@@ -210,26 +255,120 @@ function AdminProducts() {
           config
         );
 
-        alert("Product added successfully!");
+        resetForm();
+        await fetchProducts();
+      } catch (err) {
+        console.error(
+          "Error adding product:",
+          err
+        );
+
+        setError(
+          err.response?.data?.message ||
+            "Failed to add product."
+        );
       }
 
-      resetForm();
-      fetchProducts();
-    } catch (err) {
-      console.error("Error saving product:", err);
-
-      setError(
-        err.response?.data?.message ||
-          "Failed to save product."
-      );
+      return;
     }
+
+    // ==========================================
+    // DELETE PRODUCT
+    // ==========================================
+
+    if (type === "delete") {
+      try {
+        setError("");
+
+        if (!adminUser?.token) {
+          setError(
+            "Admin session not found. Please login again."
+          );
+          return;
+        }
+
+        await axios.delete(
+          `http://localhost:5000/api/products/${productId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${adminUser.token}`,
+            },
+          }
+        );
+
+        setProducts((prev) =>
+          prev.filter(
+            (product) =>
+              product._id !== productId
+          )
+        );
+      } catch (err) {
+        console.error(
+          "Error deleting product:",
+          err
+        );
+
+        setError(
+          err.response?.data?.message ||
+            "Failed to delete product."
+        );
+      }
+    }
+  };
+
+  // ==========================================
+  // SAVE PRODUCT
+  // ==========================================
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!formData.name.trim()) {
+      setError(
+        "Please enter a product name."
+      );
+      return;
+    }
+
+    const productData = {
+      ...formData,
+      price: Number(formData.price),
+      countInStock: Number(
+        formData.countInStock
+      ),
+    };
+
+    // ==========================================
+    // UPDATE CONFIRMATION
+    // ==========================================
+
+    if (editingProduct) {
+      openConfirmModal({
+        type: "update",
+        productId: editingProduct._id,
+        productData,
+        productName: formData.name,
+      });
+
+      return;
+    }
+
+    // ==========================================
+    // ADD CONFIRMATION
+    // ==========================================
+
+    openConfirmModal({
+      type: "add",
+      productData,
+      productName: formData.name,
+    });
   };
 
   // ==========================================
   // DELETE PRODUCT
   // ==========================================
 
-  const handleDeleteProduct = async (productId) => {
+  const handleDeleteProduct = (productId) => {
     const product = products.find(
       (item) => item._id === productId
     );
@@ -237,70 +376,21 @@ function AdminProducts() {
     const productName =
       product?.name || "this product";
 
-    // ------------------------------------------
-    // DELETE CONFIRMATION
-    // ------------------------------------------
-
-    const confirmed = window.confirm(
-      `Are you sure you want to delete "${productName}"?\n\n` +
-        "This action cannot be undone."
-    );
-
-    if (!confirmed) {
-      return;
-    }
-
-    // ------------------------------------------
-    // DELETE PRODUCT
-    // ------------------------------------------
-
-    try {
-      setError("");
-
-      if (!adminUser?.token) {
-        setError(
-          "Admin session not found. Please login again."
-        );
-        return;
-      }
-
-      await axios.delete(
-        `http://localhost:5000/api/products/${productId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${adminUser.token}`,
-          },
-        }
-      );
-
-      setProducts((prev) =>
-        prev.filter(
-          (product) =>
-            product._id !== productId
-        )
-      );
-
-      alert("Product deleted successfully!");
-    } catch (err) {
-      console.error(
-        "Error deleting product:",
-        err
-      );
-
-      setError(
-        err.response?.data?.message ||
-          "Failed to delete product."
-      );
-    }
+    openConfirmModal({
+      type: "delete",
+      productId,
+      productName,
+    });
   };
 
   // ==========================================
   // SEARCH
   // ==========================================
 
-  const filteredProducts = products.filter(
-    (product) => {
-      const search = searchTerm.toLowerCase();
+  const filteredProducts =
+    products.filter((product) => {
+      const search =
+        searchTerm.toLowerCase();
 
       return (
         product.name
@@ -313,8 +403,7 @@ function AdminProducts() {
           ?.toLowerCase()
           .includes(search)
       );
-    }
-  );
+    });
 
   // ==========================================
   // RENDER
@@ -404,7 +493,9 @@ function AdminProducts() {
               {/* BRAND */}
 
               <div style={styles.field}>
-                <label>Brand *</label>
+                <label>
+                  Brand *
+                </label>
 
                 <input
                   type="text"
@@ -420,7 +511,9 @@ function AdminProducts() {
               {/* CATEGORY */}
 
               <div style={styles.field}>
-                <label>Category *</label>
+                <label>
+                  Category *
+                </label>
 
                 <input
                   type="text"
@@ -436,7 +529,9 @@ function AdminProducts() {
               {/* SHADE */}
 
               <div style={styles.field}>
-                <label>Shade</label>
+                <label>
+                  Shade
+                </label>
 
                 <input
                   type="text"
@@ -538,13 +633,11 @@ function AdminProducts() {
                   }}
                 />
               </div>
-
             </div>
 
             {/* FORM BUTTONS */}
 
             <div style={styles.formActions}>
-
               <button
                 type="button"
                 onClick={resetForm}
@@ -561,9 +654,7 @@ function AdminProducts() {
                   ? "Update Product"
                   : "Add Product"}
               </button>
-
             </div>
-
           </form>
         </div>
       )}
@@ -587,7 +678,6 @@ function AdminProducts() {
         <div style={styles.productCount}>
           {filteredProducts.length} Products
         </div>
-
       </div>
 
       {/* ==========================================
@@ -812,6 +902,150 @@ function AdminProducts() {
         </div>
       )}
 
+      {/* ==========================================
+          CUSTOM CONFIRMATION MODAL
+      ========================================== */}
+
+      {showConfirmModal &&
+        confirmAction && (
+          <div style={styles.modalOverlay}>
+
+            <div style={styles.confirmModal}>
+
+              {/* MODAL ICON */}
+
+              <div
+                style={{
+                  ...styles.modalIcon,
+                  ...(confirmAction.type ===
+                  "delete"
+                    ? styles.deleteModalIcon
+                    : styles.editModalIcon),
+                }}
+              >
+                {confirmAction.type ===
+                "delete"
+                  ? "!"
+                  : "?"}
+              </div>
+
+              {/* MODAL TITLE */}
+
+              <h2 style={styles.modalTitle}>
+                {confirmAction.type ===
+                "delete"
+                  ? "Delete Product?"
+                  : confirmAction.type ===
+                    "update"
+                  ? "Update Product?"
+                  : "Add Product?"}
+              </h2>
+
+              {/* MODAL MESSAGE */}
+
+              <p style={styles.modalMessage}>
+
+                {confirmAction.type ===
+                  "delete" && (
+                    <>
+                      Are you sure you want to
+                      delete{" "}
+                      <strong>
+                        "{confirmAction.productName}"
+                      </strong>
+                      ?
+                      <br />
+                      <span
+                        style={
+                          styles.warningText
+                        }
+                      >
+                        This action cannot be
+                        undone.
+                      </span>
+                    </>
+                  )}
+
+                {confirmAction.type ===
+                  "update" && (
+                    <>
+                      Are you sure you want to
+                      update{" "}
+                      <strong>
+                        "{confirmAction.productName}"
+                      </strong>
+                      ?
+                      <br />
+                      The existing product
+                      information will be
+                      replaced with these
+                      changes.
+                    </>
+                  )}
+
+                {confirmAction.type ===
+                  "add" && (
+                    <>
+                      Are you sure you want to
+                      add{" "}
+                      <strong>
+                        "{confirmAction.productName}"
+                      </strong>{" "}
+                      as a new product?
+                      <br />
+                      This product will be added
+                      to your catalog.
+                    </>
+                  )}
+
+              </p>
+
+              {/* MODAL BUTTONS */}
+
+              <div
+                style={
+                  styles.modalActions
+                }
+              >
+
+                <button
+                  onClick={
+                    closeConfirmModal
+                  }
+                  style={
+                    styles.modalCancelButton
+                  }
+                >
+                  Cancel
+                </button>
+
+                <button
+                  onClick={
+                    handleConfirmAction
+                  }
+                  style={{
+                    ...styles.modalConfirmButton,
+
+                    ...(confirmAction.type ===
+                    "delete"
+                      ? styles.modalDeleteButton
+                      : styles.modalSaveButton),
+                  }}
+                >
+                  {confirmAction.type ===
+                  "delete"
+                    ? "Delete"
+                    : confirmAction.type ===
+                      "update"
+                    ? "Update"
+                    : "Add Product"}
+                </button>
+
+              </div>
+
+            </div>
+          </div>
+        )}
     </div>
   );
 }
@@ -1118,6 +1352,122 @@ const styles = {
     color: "#c62828",
     cursor: "pointer",
     fontWeight: "600",
+  },
+
+  // ==========================================
+  // CONFIRMATION MODAL STYLES
+  // ==========================================
+
+  modalOverlay: {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor:
+      "rgba(0, 0, 0, 0.55)",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 9999,
+    padding: "20px",
+    boxSizing: "border-box",
+  },
+
+  confirmModal: {
+    width: "100%",
+    maxWidth: "450px",
+    backgroundColor: "#fff",
+    borderRadius: "16px",
+    padding: "32px",
+    boxSizing: "border-box",
+    textAlign: "center",
+    boxShadow:
+      "0 15px 50px rgba(0,0,0,0.25)",
+    animation:
+      "modalAppear 0.2s ease-out",
+  },
+
+  modalIcon: {
+    width: "58px",
+    height: "58px",
+    borderRadius: "50%",
+    margin: "0 auto 18px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "27px",
+    fontWeight: "700",
+  },
+
+  editModalIcon: {
+    backgroundColor: "#fce4ec",
+    color: "#c2185b",
+  },
+
+  deleteModalIcon: {
+    backgroundColor: "#ffebee",
+    color: "#c62828",
+  },
+
+  modalTitle: {
+    margin: "0 0 12px",
+    color: "#333",
+    fontSize: "22px",
+    fontWeight: "700",
+  },
+
+  modalMessage: {
+    margin: "0 auto",
+    color: "#666",
+    fontSize: "14px",
+    lineHeight: "1.7",
+    maxWidth: "370px",
+  },
+
+  warningText: {
+    display: "inline-block",
+    marginTop: "6px",
+    color: "#c62828",
+    fontWeight: "600",
+  },
+
+  modalActions: {
+    display: "flex",
+    justifyContent: "center",
+    gap: "12px",
+    marginTop: "28px",
+  },
+
+  modalCancelButton: {
+    minWidth: "110px",
+    padding: "11px 20px",
+    borderRadius: "8px",
+    border: "1px solid #ddd",
+    backgroundColor: "#fff",
+    color: "#555",
+    cursor: "pointer",
+    fontSize: "14px",
+    fontWeight: "600",
+  },
+
+  modalConfirmButton: {
+    minWidth: "120px",
+    padding: "11px 20px",
+    borderRadius: "8px",
+    border: "none",
+    color: "#fff",
+    cursor: "pointer",
+    fontSize: "14px",
+    fontWeight: "600",
+  },
+
+  modalSaveButton: {
+    backgroundColor: "#d81b60",
+  },
+
+  modalDeleteButton: {
+    backgroundColor: "#c62828",
   },
 };
 

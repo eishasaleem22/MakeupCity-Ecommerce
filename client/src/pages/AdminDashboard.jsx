@@ -2,120 +2,21 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 function AdminDashboard() {
-  const { adminUser, adminLogout } = useAuth();
+  const { adminUser } = useAuth();
   const navigate = useNavigate();
-
-  const handleLogout = () => {
-    adminLogout();
-    navigate("/admin/login");
-  };
 
   return (
     <div className="admin-dashboard-page">
 
-      {/* ================= SIDEBAR ================= */}
-
-      <aside className="admin-dashboard-sidebar">
-
-        {/* LOGO */}
-
-        <div className="admin-logo-section">
-          <div className="admin-logo-icon">💄</div>
-
-          <div>
-            <div className="admin-logo-text">
-              makeup city
-            </div>
-
-            <div className="admin-logo-subtitle">
-              ADMIN PANEL
-            </div>
-          </div>
-        </div>
-
-
-        {/* NAVIGATION */}
-
-        <nav className="admin-dashboard-navigation">
-
-          <button
-            className="admin-nav-item admin-nav-item-active"
-            onClick={() => navigate("/admin/dashboard")}
-          >
-            <span className="admin-nav-icon">🏠</span>
-            <span>Dashboard</span>
-          </button>
-
-
-          <button
-            className="admin-nav-item"
-            onClick={() => navigate("/admin/products")}
-          >
-            <span className="admin-nav-icon">📦</span>
-            <span>Products</span>
-          </button>
-
-
-          <button
-            className="admin-nav-item"
-            onClick={() => navigate("/admin/orders")}
-          >
-            <span className="admin-nav-icon">🛒</span>
-            <span>Orders</span>
-          </button>
-
-
-          <button
-            className="admin-nav-item"
-            onClick={() => navigate("/admin/users")}
-          >
-            <span className="admin-nav-icon">👥</span>
-            <span>Users</span>
-          </button>
-
-
-          <button
-            className="admin-nav-item"
-            onClick={() => navigate("/admin/analytics")}
-          >
-            <span className="admin-nav-icon">📊</span>
-            <span>Analytics</span>
-          </button>
-
-        </nav>
-
-
-        {/* BOTTOM NAVIGATION */}
-
-        <div className="admin-dashboard-bottom">
-
-          <button
-            className="admin-nav-item"
-            onClick={() => navigate("/admin/settings")}
-          >
-            <span className="admin-nav-icon">⚙️</span>
-            <span>Settings</span>
-          </button>
-
-
-          <button
-            className="admin-nav-item admin-logout-item"
-            onClick={handleLogout}
-          >
-            <span className="admin-nav-icon">🚪</span>
-            <span>Logout</span>
-          </button>
-
-        </div>
-
-      </aside>
-
-
-      {/* ================= MAIN CONTENT ================= */}
+      {/* ==================================================
+          MAIN CONTENT
+      ================================================== */}
 
       <main className="admin-dashboard-main">
 
-        {/* ================= HEADER ================= */}
+        {/* ==================================================
+            HEADER
+        ================================================== */}
 
         <header className="admin-dashboard-header">
 
@@ -129,8 +30,9 @@ function AdminDashboard() {
             </p>
           </div>
 
-
-          {/* ADMIN PROFILE */}
+          {/* ==================================================
+              ADMIN PROFILE
+          ================================================== */}
 
           <div className="admin-profile-section">
 
@@ -141,6 +43,7 @@ function AdminDashboard() {
             </div>
 
             <div>
+
               <div className="admin-profile-name">
                 {adminUser?.name || "Makeup City Admin"}
               </div>
@@ -148,6 +51,7 @@ function AdminDashboard() {
               <div className="admin-profile-role">
                 Admin
               </div>
+
             </div>
 
           </div>
@@ -155,11 +59,15 @@ function AdminDashboard() {
         </header>
 
 
-        {/* ================= DASHBOARD BODY ================= */}
+        {/* ==================================================
+            DASHBOARD BODY
+        ================================================== */}
 
         <div className="admin-dashboard-body">
 
-          {/* WELCOME */}
+          {/* ==================================================
+              WELCOME
+          ================================================== */}
 
           <section className="admin-welcome-section">
 
@@ -175,7 +83,9 @@ function AdminDashboard() {
           </section>
 
 
-          {/* ================= STAT CARDS ================= */}
+          {/* ==================================================
+              STAT CARDS
+          ================================================== */}
 
           <section className="admin-dashboard-stats">
 
@@ -188,6 +98,7 @@ function AdminDashboard() {
               </div>
 
               <div>
+
                 <p className="admin-stat-label">
                   Total Products
                 </p>
@@ -195,6 +106,7 @@ function AdminDashboard() {
                 <h2 className="admin-stat-number">
                   0
                 </h2>
+
               </div>
 
             </div>
@@ -209,6 +121,7 @@ function AdminDashboard() {
               </div>
 
               <div>
+
                 <p className="admin-stat-label">
                   Total Orders
                 </p>
@@ -216,6 +129,7 @@ function AdminDashboard() {
                 <h2 className="admin-stat-number">
                   0
                 </h2>
+
               </div>
 
             </div>
@@ -230,6 +144,7 @@ function AdminDashboard() {
               </div>
 
               <div>
+
                 <p className="admin-stat-label">
                   Total Users
                 </p>
@@ -237,6 +152,7 @@ function AdminDashboard() {
                 <h2 className="admin-stat-number">
                   0
                 </h2>
+
               </div>
 
             </div>
@@ -251,6 +167,7 @@ function AdminDashboard() {
               </div>
 
               <div>
+
                 <p className="admin-stat-label">
                   Total Revenue
                 </p>
@@ -258,6 +175,7 @@ function AdminDashboard() {
                 <h2 className="admin-stat-number">
                   Rs. 0
                 </h2>
+
               </div>
 
             </div>
@@ -265,7 +183,9 @@ function AdminDashboard() {
           </section>
 
 
-          {/* ================= QUICK MANAGEMENT ================= */}
+          {/* ==================================================
+              QUICK MANAGEMENT
+          ================================================== */}
 
           <section className="admin-management-section">
 
@@ -280,7 +200,9 @@ function AdminDashboard() {
 
             <div className="admin-management-grid">
 
-              {/* PRODUCTS */}
+              {/* ==================================================
+                  PRODUCTS
+              ================================================== */}
 
               <div className="admin-management-card">
 
@@ -298,7 +220,9 @@ function AdminDashboard() {
 
                 <button
                   className="admin-management-button"
-                  onClick={() => navigate("/admin/products")}
+                  onClick={() =>
+                    navigate("/admin/products")
+                  }
                 >
                   Manage Products
                 </button>
@@ -306,7 +230,9 @@ function AdminDashboard() {
               </div>
 
 
-              {/* ORDERS */}
+              {/* ==================================================
+                  ORDERS
+              ================================================== */}
 
               <div className="admin-management-card">
 
@@ -324,7 +250,9 @@ function AdminDashboard() {
 
                 <button
                   className="admin-management-button"
-                  onClick={() => navigate("/admin/orders")}
+                  onClick={() =>
+                    navigate("/admin/orders")
+                  }
                 >
                   Manage Orders
                 </button>
@@ -332,7 +260,9 @@ function AdminDashboard() {
               </div>
 
 
-              {/* USERS */}
+              {/* ==================================================
+                  USERS
+              ================================================== */}
 
               <div className="admin-management-card">
 
@@ -350,7 +280,9 @@ function AdminDashboard() {
 
                 <button
                   className="admin-management-button"
-                  onClick={() => navigate("/admin/users")}
+                  onClick={() =>
+                    navigate("/admin/users")
+                  }
                 >
                   Manage Users
                 </button>
@@ -358,7 +290,9 @@ function AdminDashboard() {
               </div>
 
 
-              {/* ANALYTICS */}
+              {/* ==================================================
+                  ANALYTICS
+              ================================================== */}
 
               <div className="admin-management-card">
 
@@ -376,7 +310,9 @@ function AdminDashboard() {
 
                 <button
                   className="admin-management-button"
-                  onClick={() => navigate("/admin/analytics")}
+                  onClick={() =>
+                    navigate("/admin/analytics")
+                  }
                 >
                   View Analytics
                 </button>

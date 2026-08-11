@@ -29,6 +29,14 @@ import ScrollToTop from "./components/ScrollToTop";
 
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminProducts from "./pages/AdminProducts";
+import AdminOrders from "./pages/AdminOrders";
+import AdminUsers from "./pages/AdminUsers";
+
+/* ==================================================
+   ADMIN LAYOUT
+================================================== */
+
+import AdminLayout from "./admin/AdminLayout";
 
 function App() {
   const navigate = useNavigate();
@@ -40,7 +48,8 @@ function App() {
   // CHECK ADMIN ROUTE
   // ==========================================
 
-  const isAdminRoute = location.pathname.startsWith("/admin");
+  const isAdminRoute =
+    location.pathname.startsWith("/admin");
 
   // ==========================================
   // PRODUCTS
@@ -216,14 +225,44 @@ function App() {
 
           <Route
             path="/admin/dashboard"
-            element={<AdminDashboard />}
+            element={
+              <AdminLayout>
+                <AdminDashboard />
+              </AdminLayout>
+            }
           />
 
           {/* ================= ADMIN PRODUCTS ================= */}
 
           <Route
             path="/admin/products"
-            element={<AdminProducts />}
+            element={
+              <AdminLayout>
+                <AdminProducts />
+              </AdminLayout>
+            }
+          />
+
+          {/* ================= ADMIN ORDERS ================= */}
+
+          <Route
+            path="/admin/orders"
+            element={
+              <AdminLayout>
+                <AdminOrders />
+              </AdminLayout>
+            }
+          />
+
+          {/* ================= ADMIN USERS ================= */}
+
+          <Route
+            path="/admin/users"
+            element={
+              <AdminLayout>
+                <AdminUsers />
+              </AdminLayout>
+            }
           />
 
         </Routes>
@@ -280,7 +319,6 @@ function App() {
                       padding: "0 20px",
                     }}
                   >
-
                     <h2
                       style={{
                         fontSize: "28px",
@@ -709,7 +747,6 @@ function App() {
                     >
                       Rs. {totalPrice}
                     </span>
-
                   </h3>
 
                   <button
@@ -763,13 +800,11 @@ function App() {
   );
 }
 
-
 // ==========================================
 // STYLES
 // ==========================================
 
 const styles = {
-
   cartNotification: {
     position: "fixed",
     top: "90px",
@@ -784,7 +819,6 @@ const styles = {
     fontWeight: "600",
     zIndex: 2000,
   },
-
 };
 
 export default App;

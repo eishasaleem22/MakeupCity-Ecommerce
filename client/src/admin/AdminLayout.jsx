@@ -3,13 +3,15 @@ import AdminSidebar from "./AdminSidebar";
 function AdminLayout({ children }) {
   return (
     <div style={styles.container}>
+      {/* ================= ADMIN SIDEBAR ================= */}
 
       <AdminSidebar />
+
+      {/* ================= ADMIN MAIN CONTENT ================= */}
 
       <main style={styles.main}>
         {children}
       </main>
-
     </div>
   );
 }
