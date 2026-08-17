@@ -15,7 +15,7 @@ function CategoryProducts({ onAddToCart }) {
         setLoading(true);
 
         const { data } = await axios.get(
-          `http://localhost:5000/api/products/category/${categorySlug}`
+          `http://makeup-city-backend.vercel.app/api/products/category/${categorySlug}`
         );
 
         setProducts(data);

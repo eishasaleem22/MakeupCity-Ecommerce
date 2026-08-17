@@ -58,7 +58,7 @@ function AdminOrders() {
       }
 
       const { data } = await axios.get(
-        "http://localhost:5000/api/orders",
+        "http://makeup-city-backend.vercel.app/api/orders",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -154,7 +154,7 @@ function AdminOrders() {
 
       const { data } =
         await axios.put(
-          `http://localhost:5000/api/orders/${orderId}/status`,
+          `http://makeup-city-backend.vercel.app/api/orders/${orderId}/status`,
           {
             status: newStatus,
           },

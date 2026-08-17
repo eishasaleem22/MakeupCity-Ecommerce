@@ -140,7 +140,7 @@ function App() {
     const fetchProducts = async () => {
       try {
         const { data } = await axios.get(
-          "http://localhost:5000/api/products"
+          "http://makeup-city-backend.vercel.app/api/products"
         );
 
         setProducts(data);
