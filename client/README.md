@@ -1,16 +1,88 @@
-# React + Vite
+# MakeupCity — Full-Stack E-Commerce Website 💄
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+MakeupCity is a full-stack e-commerce website for a cosmetics and beauty store.  
+The project provides a complete shopping experience for customers along with an admin panel for managing the store.
 
-Currently, two official plugins are available:
+## ✨ Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+### Customer Side
 
-## React Compiler
+- Browse makeup and beauty products
+- View products by category
+- View detailed product information
+- Add products to cart
+- Increase/decrease product quantities
+- Remove products from cart
+- Add products to favorites
+- User signup and login
+- Checkout system
+- Multiple payment method options
+- Order placement
+- Order confirmation email
+- Order status updates through email
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Admin Panel
 
-## Expanding the Oxlint configuration
+- Admin login
+- Admin dashboard
+- Product management
+- Add, edit and delete products
+- View all customer orders
+- View complete order details
+- Update order status
+- Automatic customer email notifications when order status changes
+- View registered users
+- View user details
+- View user's order history
+- View total orders and total amount spent by each user
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+## 🛠️ Technologies Used
+
+### Frontend
+
+- React.js
+- Vite
+- React Router
+- Axios
+- JavaScript
+- CSS
+
+### Backend
+
+- Node.js
+- Express.js
+- MongoDB
+- Mongoose
+- JWT Authentication
+- bcryptjs
+- Nodemailer
+- CORS
+
+## 📁 Project Structure
+
+```text
+MakeupCity-Ecommerce/
+│
+├── client/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── admin/
+│   │   ├── context/
+│   │   ├── App.jsx
+│   │   └── main.jsx
+│   │
+│   ├── public/
+│   ├── package.json
+│   └── vercel.json
+│
+├── server/
+│   ├── config/
+│   ├── controllers/
+│   ├── models/
+│   ├── routes/
+│   ├── server.js
+│   ├── package.json
+│   └── .env
+│
+└── README.md
