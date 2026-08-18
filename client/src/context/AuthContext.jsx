@@ -66,7 +66,7 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (name, email, password) => {
     const { data } = await axios.post(
-      "http://makeup-city-backend.vercel.app/api/auth/register",
+      "http://localhost:5000/api/auth/register",
       {
         name,
         email,
@@ -91,7 +91,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     const { data } = await axios.post(
-      "http://makeup-city-backend.vercel.app/api/auth/login",
+      "http://localhost:5000/api/auth/login",
       {
         email,
         password,
@@ -115,7 +115,7 @@ export const AuthProvider = ({ children }) => {
 
   const adminLogin = async (email, password) => {
     const { data } = await axios.post(
-      "http://makeup-city-backend.vercel.app/api/auth/login",
+      "http://localhost:5000/api/auth/login",
       {
         email,
         password,

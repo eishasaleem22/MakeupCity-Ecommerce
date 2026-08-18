@@ -109,7 +109,7 @@ function Checkout() {
       // =====================================================
 
       const response = await fetch(
-        "http://makeup-city-backend.vercel.app/api/orders/send-confirmation",
+        "http://localhost:5000/api/orders/send-confirmation",
         {
           method: "POST",
 

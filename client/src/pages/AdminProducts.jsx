@@ -49,7 +49,7 @@ function AdminProducts() {
       setError("");
 
       const { data } = await axios.get(
-        "http://makeup-city-backend.vercel.app/api/products"
+        "http://localhost:5000/api/products"
       );
 
       setProducts(data);
@@ -206,7 +206,7 @@ function AdminProducts() {
         };
 
         await axios.put(
-          `http://makeup-city-backend.vercel.app/api/products/${productId}`,
+          `http://localhost:5000/api/products/${productId}`,
           productData,
           config
         );
@@ -250,7 +250,7 @@ function AdminProducts() {
         };
 
         await axios.post(
-          "http://makeup-city-backend.vercel.app/api/products",
+          "http://localhost:5000/api/products",
           productData,
           config
         );
@@ -288,7 +288,7 @@ function AdminProducts() {
         }
 
         await axios.delete(
-          `http://makeup-city-backend.vercel.app/api/products/${productId}`,
+          `http://localhost:5000/api/products/${productId}`,
           {
             headers: {
               Authorization: `Bearer ${adminUser.token}`,

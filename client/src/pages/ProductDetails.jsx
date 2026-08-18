@@ -23,7 +23,7 @@ function ProductDetails({ onAddToCart }) {
     const fetchProduct = async () => {
       try {
         const { data } = await axios.get(
-          `http://makeup-city-backend.vercel.app/api/products/${id}`
+          `http://localhost:5000/api/products/${id}`
         );
 
         setProduct(data);

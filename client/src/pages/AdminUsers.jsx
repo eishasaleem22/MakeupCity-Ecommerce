@@ -32,7 +32,7 @@ function AdminUsers() {
       const token = adminUser?.token;
 
       const { data } = await axios.get(
-        "http://makeup-city-backend.vercel.app/api/users",
+        "http://localhost:5000/api/users",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -69,7 +69,7 @@ function AdminUsers() {
       const token = adminUser?.token;
 
       const { data } = await axios.get(
-        `http://makeup-city-backend.vercel.app/api/users/${userId}`,
+        `http://localhost:5000/api/users/${userId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
